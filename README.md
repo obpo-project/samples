@@ -7,6 +7,7 @@
 | arm | [libcompatible.so](arm/libcompatible.so) | [nProtect AppGuard](https://appguard.nprotect.com/) | | YES |
 | arm | [libdexvmp.so](arm/libdexvmp.so) | secneo | | Partial |
 | arm | [libnative-lib.so](arm/libnative-lib.so) | * | [GoSSIP-SJTU/Armariris](https://github.com/GoSSIP-SJTU/Armariris) | YES |
+| arm | [libmetasec_ml.so](arm/libmetasec_ml.so) | * | | YES |
 | arm64 | [libvdog.so](arm64/libvdog.so) | [amimo/ollvm-breaker](https://github.com/amimo/ollvm-breaker/blob/master/tests/libvdog.so) | | YES |
 | arm64 | [cff-arm64-v8a.elf](arm64/cff-arm64-v8a.elf) | [amimo/ollvm-breaker](https://github.com/amimo/ollvm-breaker/blob/master/tests/cff-arm64-v8a.elf) | | YES |
 | arm64 | [libnative-lib.so](arm64/libnative-lib.so) | [sanfengAndroid/AntiOllvm](https://github.com/sanfengAndroid/AntiOllvm/blob/main/Arm64Test/kanxueOllvm/bin/libnative-lib.so) |  | YES |
