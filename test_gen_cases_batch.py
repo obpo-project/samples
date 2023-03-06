@@ -92,6 +92,7 @@ def ida_entry():
 
 def python_entry():
     import threadpool
+
     pool = threadpool.ThreadPool(num_workers=64)
     idapath = os.getenv("IDAPATH")
 
@@ -101,35 +102,41 @@ def python_entry():
             print("cannot found ida, exiting...")
             exit()
 
+    all_arch = ["arm", "arm64", "x86", "x86_64"]
+
     def runnable(target):
         os.system("{} -A -S{} {}".format(
             os.path.join(idapath, "ida64" if "64" in arch else "ida"), __file__, target))
         print("{} -A -S{} {}".format(
             os.path.join(idapath, "ida64" if "64" in arch else "ida"), __file__, target))
 
-    for arch in ["arm", "arm64", "x86", "x86_64"]:
-        bindir = os.path.join(os.path.dirname(__file__), arch)
+    def clear():
+        for a in all_arch:
+            d = os.path.join(os.path.dirname(__file__), a)
+            for f in os.listdir(d):
+                if f.endswith(".id0") \
+                        or f.endswith(".id1") \
+                        or f.endswith(".id2") \
+                        or f.endswith(".idb") \
+                        or f.endswith(".nam") \
+                        or f.endswith(".til") \
+                        or f.endswith(".i64"):
+                    os.remove(os.path.join(d, f))
 
-        for file in os.listdir(bindir):
-            if file.endswith(".id0") \
-                    or file.endswith(".id1") \
-                    or file.endswith(".id2") \
-                    or file.endswith(".idb") \
-                    or file.endswith(".nam") \
-                    or file.endswith(".til") \
-                    or file.endswith(".i64"):
-                os.remove(os.path.join(bindir, file))
-
-        for file in os.listdir(bindir):
+    clear()
+    for arch in all_arch:
+        bin_dir = os.path.join(os.path.dirname(__file__), arch)
+        for file in os.listdir(bin_dir):
             if not file.endswith(".config.json"): continue
-            binfile = os.path.join(bindir, file.removesuffix(".config.json"))
-            if not os.path.exists(binfile):
-                print("missing binary {}".format(binfile))
-                continue
-            else:
 
-                pool.putRequest(threadpool.WorkRequest(runnable, [binfile]))
+            bin_file = os.path.join(bin_dir, file.removesuffix(".config.json"))
+            if not os.path.exists(bin_file):
+                print("missing binary {}".format(bin_file))
+                continue
+
+            pool.putRequest(threadpool.WorkRequest(runnable, [bin_file]))
     pool.wait()
+    clear()
 
 
 def is_idapython():
